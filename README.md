@@ -152,7 +152,16 @@ conf.setInteger("rest.port", 8082);
 StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment(conf);
 ```
 
-**4）打包提交到真实集群**
+**4）改完代码后运行报 `Unresolved compilation problems`**
+
+这是 Maven 增量编译的坑：某次编译失败时 javac 会留下"半残"的 `.class` 文件，
+之后 `mvn compile` 会因为"源文件没变化"而跳过它，于是运行时加载的仍是坏 class。
+
+```bash
+mvn clean compile      # 强制全量重编译即可解决
+```
+
+**5）打包提交到真实集群**
 
 ```bash
 mvn clean package          # 生成 target/flink-learning-1.0-SNAPSHOT.jar

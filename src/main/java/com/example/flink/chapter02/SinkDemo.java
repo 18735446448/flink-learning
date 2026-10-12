@@ -8,7 +8,9 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  * 第 2 章：数据输出（Sink）。
@@ -54,7 +56,13 @@ public class SinkDemo {
         @Override
         public void open(Configuration parameters) throws Exception {
             // open 在每个并行子任务启动时调用一次，用于建立连接/打开文件
-            writer = new BufferedWriter(new FileWriter(path, true));
+            // 注意：FileWriter 不会自动创建父目录（mvn clean 后 target 会被清空），这里需要手动创建
+            File file = new File(path);
+            File parent = file.getParentFile();
+            if (parent != null && !parent.exists() && !parent.mkdirs()) {
+                throw new IOException("无法创建输出目录：" + parent.getAbsolutePath());
+            }
+            writer = new BufferedWriter(new FileWriter(file, true));
         }
 
         @Override
