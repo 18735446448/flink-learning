@@ -1,0 +1,22 @@
+# Maven 构建产物
+target/
+*.class
+*.jar
+*.war
+
+# Checkpoint / 本地状态
+checkpoints/
+out/
+*.log
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.swp
+
+# 系统文件
+.DS_Store
+Thumbs.db
